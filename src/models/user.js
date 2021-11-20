@@ -1,27 +1,32 @@
 export const userModel =  {
-  
   userId : null,
-  name : '',
+  firstName : '',
+  lastName : '',
   type : '',
   pass : '',
-  email : ''
-
+  email : '',
+  userName : '',
 }
 
 export const sampleData = [
   {
     userId : 1,
-    name : 'admin',
+    firstName : 'admin',
+    lastName : 'admin',
     type : 'admin',
     pass : 'admin',
-    email : ''
+    email : 'admin@gmail.com',
+    userName : 'admin',
   },
   {
     userId : 2,
-    name : 'user',
+    firstName : 'user',
+    lastName : 'user',
     type : 'user',
     pass : 'user',
-    email : 'user'
+    email : 'user@gmail.com',
+    userName : 'user',
 
   }
 ]
+

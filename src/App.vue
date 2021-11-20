@@ -69,6 +69,7 @@
       return {
         drawer: null,
         items: [
+          { title: 'Login', path: '/login', icon: 'mdi-book' },
           { title: 'User', path: '/user', icon: 'mdi-book' },
           { title: 'Book', path: '/book', icon: 'mdi-book' },
           { title: 'Order', path: '/order', icon: 'mdi-alarm' },

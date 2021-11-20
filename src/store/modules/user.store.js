@@ -20,6 +20,7 @@ export const user = {
     getCurrentUser : state => {
       const user = getObjectData( state.users, state.currentUser, 'userId' )
       return user;
-    }
+    },
+    getUserNameOnly : state => state.users.map( x => x.userName )
   }
 };
