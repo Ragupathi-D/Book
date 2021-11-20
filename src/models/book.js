@@ -31,3 +31,19 @@ export const sampleData = [
     delete : false
   }
 ]
+
+export const sampleOrder = [
+  {
+    userId : 1,
+    title : 'Book 1',
+    price : 150,
+    qty : 5, 
+  },
+  {
+    userId : 1,
+    title : 'Book 2',
+    price : 300,
+    qty : 6,
+    
+  }
+]

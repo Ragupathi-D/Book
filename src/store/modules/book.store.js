@@ -1,14 +1,15 @@
-import { bookModel, sampleData } from '../../models/book'
+import { bookModel, sampleData, sampleOrder } from '../../models/book'
 // import { uuid } from '../../helper/common'
 
 const list = [...sampleData]
 const autoIncrement = list ? list.length + 1 : 1;
+const sampleOrderList = [...sampleOrder]
 
 export const book = {
   namespaced: true,
   state: {
     bookList : [...list],
-    orderBooks : [],
+    orderBooks : [...sampleOrderList],
     autoIncrement  : autoIncrement // reason for list set default 
   },
   mutations: {

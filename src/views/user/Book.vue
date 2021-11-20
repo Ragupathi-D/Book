@@ -1,183 +1,139 @@
 <template>
   <v-container fluid>
-     <v-row>
-      <v-col
-        v-for="item in getBooks"
-        :key="item.bookId"
-        cols="12"
-        sm="6"
-        md="4"
-        lg="3"
+
+      <v-row>
+        <v-col
+          v-for="item in getBooks"
+          :key="item.bookId"
+          cols="12"
+          sm="6"
+          md="4"
+          lg="3"
+        >
+          <v-card>
+            <v-img
+              class="white--text align-end"
+              height="200px"
+              src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+            >
+              <v-card-title>{{item.title}}</v-card-title>
+            </v-img>
+            <v-card-title >
+              {{ item.title }}
+            </v-card-title>
+            <v-card-subtitle class="v-list-item__subtitle pt-0" >
+              {{ item.authorName }}
+            </v-card-subtitle>
+            <v-divider>
+            </v-divider>
+            <v-card-actions>
+              <v-btn
+                color="teal"
+                text
+              >
+                ${{item.price}}
+              </v-btn>
+              <v-spacer></v-spacer>
+              <v-btn
+                color="orange"
+                text
+                @click="details(item)"
+              >
+                Buy
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+      </v-row>
+    <v-navigation-drawer
+      v-model="drawer"
+      primary
+      width="400"
+      right
+      fixed
+      temporary
+    >
+      <v-card
+        elevation="0"
       >
-        <v-card>
-          <v-img
-            class="white--text align-end"
-            height="200px"
-            src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+        <v-card-title class="pink--text" >
+          {{ needed.title }}
+        </v-card-title>
+        <v-card-text>
+          {{ needed.authorName }}
+          <br>
+          {{ needed.description }}
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="success"
+            small
           >
-            <v-card-title>{{item.title}}</v-card-title>
-          </v-img>
-          <v-card-title >
-            {{ item.title }}
-          </v-card-title>
-          <v-card-subtitle class="v-list-item__subtitle pt-0" >
-            {{ item.authorName }}
-          </v-card-subtitle>
-          <v-divider>
-          </v-divider>
-          <v-card-actions>
-            <v-btn
-              color="teal"
-              text
-            >
-              ${{item.price}}
-            </v-btn>
-            <v-spacer></v-spacer>
-            <v-btn
-              color="orange"
-              text
-            >
-              Buy
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-col>
-    </v-row>
+          ${{needed.price}}
+            buy
+          </v-btn>
+        </v-card-actions>
+        <v-divider></v-divider>
+        <v-card-title class="mt-10 small font-weight-black blue--text" >Order Details</v-card-title>
+        <v-simple-table dense>
+          <template v-slot:default>
+            <thead>
+              <tr>
+                <th class="text-left">
+                  Title
+                </th>
+                <th class="text-left">
+                  Price
+                </th>
+                <th class="text-left">
+                  Qty
+                </th>
+                <th class="text-left">
+                  Total
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="item in getOrderBook"
+                :key="item.bookId"
+              >
+                <td>{{ item.title }}</td>
+                <td>{{ item.price }}</td>
+                <td>{{ item.qty }}</td>
+                <td>{{ item.price * item.qty }}</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <th colspan="3" class="text-right" >Total</th>
+                <th>{{ totalAmount() }}</th>
+              </tr>
+            </tfoot>
+          </template>
+        </v-simple-table>
+      </v-card>
+    </v-navigation-drawer>
   </v-container>
 </template>
 
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 
   export default {
     data () {
       return {
-        itemsPerPageArray: [4, 8, 12],
-        search: '',
-        filter: {},
-        sortDesc: false,
-        page: 1,
-        itemsPerPage: 4,
-        sortBy: 'name',
-        keys: [
-          'Name',
-          'Calories',
-          'Fat',
-          'Carbs',
-          'Protein',
-          'Sodium',
-          'Calcium',
-          'Iron',
-        ],
-        items: [
-          {
-            name: 'Frozen Yogurt',
-            calories: 159,
-            fat: 6.0,
-            carbs: 24,
-            protein: 4.0,
-            sodium: 87,
-            calcium: '14%',
-            iron: '1%',
-          },
-          {
-            name: 'Ice cream sandwich',
-            calories: 237,
-            fat: 9.0,
-            carbs: 37,
-            protein: 4.3,
-            sodium: 129,
-            calcium: '8%',
-            iron: '1%',
-          },
-          {
-            name: 'Eclair',
-            calories: 262,
-            fat: 16.0,
-            carbs: 23,
-            protein: 6.0,
-            sodium: 337,
-            calcium: '6%',
-            iron: '7%',
-          },
-          {
-            name: 'Cupcake',
-            calories: 305,
-            fat: 3.7,
-            carbs: 67,
-            protein: 4.3,
-            sodium: 413,
-            calcium: '3%',
-            iron: '8%',
-          },
-          {
-            name: 'Gingerbread',
-            calories: 356,
-            fat: 16.0,
-            carbs: 49,
-            protein: 3.9,
-            sodium: 327,
-            calcium: '7%',
-            iron: '16%',
-          },
-          {
-            name: 'Jelly bean',
-            calories: 375,
-            fat: 0.0,
-            carbs: 94,
-            protein: 0.0,
-            sodium: 50,
-            calcium: '0%',
-            iron: '0%',
-          },
-          {
-            name: 'Lollipop',
-            calories: 392,
-            fat: 0.2,
-            carbs: 98,
-            protein: 0,
-            sodium: 38,
-            calcium: '0%',
-            iron: '2%',
-          },
-          {
-            name: 'Honeycomb',
-            calories: 408,
-            fat: 3.2,
-            carbs: 87,
-            protein: 6.5,
-            sodium: 562,
-            calcium: '0%',
-            iron: '45%',
-          },
-          {
-            name: 'Donut',
-            calories: 452,
-            fat: 25.0,
-            carbs: 51,
-            protein: 4.9,
-            sodium: 326,
-            calcium: '2%',
-            iron: '22%',
-          },
-          {
-            name: 'KitKat',
-            calories: 518,
-            fat: 26.0,
-            carbs: 65,
-            protein: 7,
-            sodium: 54,
-            calcium: '12%',
-            iron: '6%',
-          },
-        ],
+       drawer : false,
+       needed : {},
       }
     },
     computed: {
       ...mapGetters('BOOK', {
-        getBooks : 'getBooks'
+        getBooks : 'getBooks',
+        getOrderBook : 'getOrderBook'
       }),
       numberOfPages () {
         return Math.ceil(this.items.length / this.itemsPerPage)
@@ -187,6 +143,17 @@ import { mapGetters } from 'vuex';
       },
     },
     methods: {
+      totalAmount () {
+
+        return this.getOrderBook.reduce((a, item) => (item.price * item.qty) + a, 0);
+      },
+      ...mapActions('BOOK', {
+        setOrderBook : 'setOrderBook'
+      }),
+      details (item) {
+        this.drawer = true;
+        this.needed = Object.assign({}, item); 
+      },
       nextPage () {
         if (this.page + 1 <= this.numberOfPages) this.page += 1
       },
