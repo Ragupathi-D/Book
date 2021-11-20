@@ -12,8 +12,8 @@ export const bookModel =  {
 export const sampleData = [
   {
     image : "@/assets/logo.png",
-    title : 'asdfasdf',
-    description : 'descript8ion',
+    title : 'Book 1',
+    description : 'descript8ion asdfasdf asdfasdf asdfasdfasd fasdfasdf asdfsadf sadfsadf sadfasdf sadfasdfasd fasd fas df sad f asdf asdfasdfsa dfas df asd fasdf asd fa sdf',
     authorName : 'Mani',
     stock : 5,
     price : 100,
@@ -22,7 +22,7 @@ export const sampleData = [
   },
   {
     image : "@/assets/logo.png",
-    title : 'asdfasdf',
+    title : 'Book 2',
     description : 'descript8ion',
     authorName : 'Mani',
     stock : 5,

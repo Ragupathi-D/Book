@@ -6,6 +6,10 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+    path: '/user',
+    component : () => import( '../views/user/Book.vue' )
+  },
+  {
     path: '/test',
     component : () => import( '../views/test.vue' )
   },
