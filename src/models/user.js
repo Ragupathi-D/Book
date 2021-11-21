@@ -29,7 +29,6 @@ export const sampleData = [
     mobile : '1231231233',
     email : 'user@gmail.com',
     userName : 'user',
-
   }
 ]
 
