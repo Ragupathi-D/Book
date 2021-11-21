@@ -5,7 +5,6 @@
       :defaultItem="defaultValue"
       :value="getOrderBook"
       :items="getBooks"
-      :showSelect="true"
       itemKey="bookId"
       :setEditedItem.sync="setEditedItem"
       @selectedValue="setOrderBook"
@@ -13,6 +12,7 @@
       @DeleteItem="deleteItem"
       @UpdateItem="updateItem"
     >
+
         <!-- @DeleteItem="fetchDropDown"
       @EditItem="EditPPIInfo"
           @AddItem="addItem"
@@ -155,12 +155,14 @@ export default {
     }
   },
   data: () => ({
+    searchBookId : null,
+    search : '',
     defaultValue : Object.assign({...bookModel}, {editions : [{...bookEditionModel}]}),
     bookEditionModel : {...bookEditionModel},
     setEditedItem : {},
     headers : [
       {text : 'Title', value : 'title'},
-      {text : 'Description', value : 'description'},
+      {text : 'Edition', value : 'edition'},
       {text : 'Author Name', value : 'authorName'},
       {text : 'Price', value : 'price'},
       {text : 'Available', value : 'stock'},

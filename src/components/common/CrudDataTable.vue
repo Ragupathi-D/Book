@@ -7,18 +7,25 @@
     :show-select="showSelect"
     sort-by="calories"
     class="elevation-1"
+    :search="search"
     :item-key="itemKey"
     return-object
+    mobile-breakpoint="0"
   >
-    <template v-for="(_,slot) in $scopedSlots"  v-slot:[slot]="props" >
-      <slot :name="slot" v-bind="props"   ></slot>
-    </template>
-
     <template v-slot:top>
       <v-toolbar
         flat
       >
         <v-spacer></v-spacer>
+         <v-text-field
+          v-model="search"
+          label="Search"
+          single-line
+          hide-details
+          append-outer
+        >
+          <template v-slot:append-outer >
+            <div>
         <v-dialog
           v-model="dialog"
         >
@@ -32,6 +39,7 @@
               class="mb-2"
               v-bind="attrs"
               v-on="on"
+              small
             >
               Add
             </v-btn>
@@ -79,10 +87,16 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
+        </div>
+          </template>
+        </v-text-field>
       </v-toolbar>
     </template>
 
-    
+    <template v-for="(_,slot) in $scopedSlots"  v-slot:[slot]="props" >
+      <slot :name="slot" v-bind="props"   ></slot>
+    </template>
+
 
     <template v-slot:[`item.Action`]="{ item }">
       <v-icon
@@ -167,6 +181,7 @@
     data: () => ({
       form: true,
       data : [],
+      search : '',
       dialog: false,
       dialogDelete: false,
       editedIndex: -1,
