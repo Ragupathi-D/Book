@@ -1,8 +1,7 @@
 <template>
   <Fragment>
 
-<!-- v-if="getCurrentUser.type == 'admin'" -->
-    <v-toolbar  >
+    <v-toolbar v-if="getCurrentUser.type == 'admin'" >
       <v-autocomplete
         v-model="selectedUser"
         class="mt-2"
@@ -21,7 +20,7 @@
 
     <crud-data-table
       :headers="headers"
-      :items="displayOrders"
+      :items="filterUserDetails"
       :editBtn="false"
       :addBtn="false"
       :deleteBtn="false"
