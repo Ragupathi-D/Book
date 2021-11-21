@@ -5,6 +5,7 @@ export const userModel =  {
   type : '',
   pass : '',
   email : '',
+  mobile : '',
   userName : '',
 }
 
@@ -15,6 +16,7 @@ export const sampleData = [
     lastName : 'admin',
     type : 'admin',
     pass : 'admin',
+    mobile : '1231231233',
     email : 'admin@gmail.com',
     userName : 'admin',
   },
@@ -24,6 +26,7 @@ export const sampleData = [
     lastName : 'user',
     type : 'user',
     pass : 'user',
+    mobile : '1231231233',
     email : 'user@gmail.com',
     userName : 'user',
 

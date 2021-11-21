@@ -5,7 +5,6 @@
       :defaultItem="defaultValue"
       :value="getOrderBook"
       :items="getBooks"
-      :editBtn="false"
       :showSelect="true"
       itemKey="bookId"
       @selectedValue="setOrderBook"

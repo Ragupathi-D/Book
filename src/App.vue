@@ -45,26 +45,42 @@
       <v-spacer></v-spacer>
 
       <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
+        icon
+        v-if="getCurrentUser.userId !== undefined"
+        @click="logout"
       >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
+        <v-icon>mdi-logout</v-icon>
       </v-btn>
     </v-app-bar>
     <v-main >
       <router-view/>
     </v-main>
     <v-footer app >
-      @ragupathi asdfasdf asdfasdf asdfasdf
+      @Ragupathi-D
     </v-footer>
   </v-app>
 </template>
 
 <script>
+  import { mapGetters, mapActions } from 'vuex'
+
   export default {
     name : 'app',
+    methods : {
+      ...mapActions('USER',{
+        'logoutProcess' : 'logout' 
+      }),
+      async logout(){
+        await this.logoutProcess()
+        this.$router.push('/login')
+      }
+      
+    },
+    computed: {
+      ...mapGetters('USER', {
+        getCurrentUser : 'getCurrentUser'
+      })
+    },
     data () {
       return {
         drawer: null,

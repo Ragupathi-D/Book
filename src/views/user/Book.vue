@@ -12,11 +12,10 @@
         >
           <v-card>
             <v-img
-              class="white--text align-end"
+              class="white--text align-end ma-2"
               height="200px"
               src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
             >
-              <v-card-title>{{item.title}}</v-card-title>
             </v-img>
             <v-card-title >
               {{ item.title }}
@@ -36,10 +35,10 @@
               <v-spacer></v-spacer>
               <v-btn
                 color="orange"
-                text
                 @click="details(item)"
+                icon
               >
-                Buy
+                <v-icon>mdi-cart</v-icon>
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -56,18 +55,27 @@
       <v-card
         elevation="0"
       >
-        <v-card-title class="pink--text" >
+                  <v-img
+              class="white--text align-end"
+              height="200px"
+              src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+            >
+            </v-img>
+
+        <v-card-title class="pink--text pb-2" >
           {{ needed.title }}
         </v-card-title>
-        <v-card-text>
+        <v-card-subtitle class="pt-1" >
           {{ needed.authorName }}
-          <br>
+        </v-card-subtitle>
+        <!-- <v-card-text>
           {{ needed.description }}
-        </v-card-text>
+
+        </v-card-text> -->
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
-            color="success"
+            color="primary"
             small
           >
           ${{needed.price}}
