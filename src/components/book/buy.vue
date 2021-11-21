@@ -103,7 +103,8 @@
 import { mapActions, mapGetters } from 'vuex';
 // import NavRightSide from '../common/NavRightSide.vue';
 import { Fragment } from 'vue-fragment'
-import dayjs from "dayjs";
+import { nowDate } from "../../helper/common"
+
 
 export default {
   components : {
@@ -133,7 +134,7 @@ export default {
       addBook : 'addBook'
     }),
     async buyProduct () {
-      const now = dayjs().format('YYYY-MM-DD HH:mm:ss');
+      const now = nowDate();
       const userId = this.getCurrentUser.userId
       const result = await this.getOrderBook.map(function(value){
         const qty = 1

@@ -1,5 +1,5 @@
 import { orderModel, sampleData } from '../../models/order'
-import { getObjectData } from '../../helper/common' 
+import { getObjectData, nowDate } from '../../helper/common' 
 
 const list = [...sampleData]
 
@@ -24,11 +24,14 @@ export const order = {
   actions: {
     addBook: ({ commit, state }, payload) => {
       const item = payload
+      const now = nowDate()
       item.forEach(element => {
         if(!element.orderId) {
           element.orderId = state.autoIncrement
+          element.orderDate = now
+          element.amount = element.qty * element.price
           commit('autoIncrement')
-        }        
+        }
       });
       commit('addBook', item)
     },
@@ -54,6 +57,7 @@ export const order = {
         if(!tempUser[element.userId]){
           tempUser[element.userId] = getObjectData( user, element.userId, 'userId' );
         }
+        console.log('data', element)
         const bookDetails = tempBook[element.bookId]
         const userDetails = tempUser[element.userId]
         result.push( Object.assign({}, element, 

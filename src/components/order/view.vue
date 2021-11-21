@@ -6,29 +6,11 @@
     :addBtn="false"
     :deleteBtn="false"
   >
-      <!-- @DeleteItem="fetchDropDown"
-    @EditItem="EditPPIInfo"
-        @AddItem="addItem"
-
-    @UpdateItem="EditPPIInfo" -->
   <template v-slot:forms="{ editedItem }" >
     <v-row
       class="justify-end"
       dense
     >
-      <!-- <v-col
-        cols="6"
-        md="3"
-      >
-        <v-autocomplete
-          v-model="editedItem.BuyOutFARID"
-          :items="FARInfo"
-          item-text="iboss_preferred_name"
-          item-value="iboss_personal_info_id"
-          label="BuyOut FARName"
-        >
-        </v-autocomplete>
-      </v-col> -->
       <v-col
         cols="12"
       >
@@ -108,9 +90,6 @@ export default {
     ...mapGetters('ORDER', {
       displayOrders : 'displayOrders'
     }),
-    // ...mapGetters('USER', {
-    //   displayOrders : 'displayOrders'
-    // }),
   },
   data: () => ({
     headers : []

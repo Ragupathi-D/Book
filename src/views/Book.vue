@@ -1,7 +1,5 @@
 <template>
-  <v-container fluid class="fill-height align-start"  >
-    <v-row alignitem >
-      <v-col class="pa-0" >
+  <v-container fluid  >
         <h2>Book Order</h2>
         <!-- <v-card> -->
           <v-tabs v-if="false" fixed-tabs >
@@ -10,9 +8,6 @@
           </v-tabs>
           <router-view></router-view>
         <!-- </v-card> -->
-      </v-col>
-
-    </v-row>
   </v-container>
 </template>
 

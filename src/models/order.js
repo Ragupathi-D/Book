@@ -1,7 +1,4 @@
-import dayjs from "dayjs";
-
-const now = dayjs().format('YYYY-MM-DD HH:mm:ss');
-
+import { nowDate } from "../helper/common"
 
 export const orderModel =  {
   amount : '',
@@ -17,7 +14,7 @@ export const orderModel =  {
 export const sampleData =  [
   {
     amount : 250,
-    orderDate : now,
+    orderDate : nowDate(),
     qty : 5,
     price : 250,
     orderId : 1,

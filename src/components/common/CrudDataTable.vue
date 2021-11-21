@@ -16,17 +16,9 @@
       <v-toolbar
         flat
       >
-        <v-spacer></v-spacer>
-         <v-text-field
-          v-model="search"
-          label="Search"
-          single-line
-          hide-details
-          append-outer
-        >
-          <template v-slot:append-outer >
-            <div>
-        <v-dialog
+       
+
+         <v-dialog
           v-model="dialog"
         >
           <template 
@@ -41,7 +33,7 @@
               v-on="on"
               small
             >
-              Add
+              Add New
             </v-btn>
           </template>
           <v-card>
@@ -87,9 +79,16 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-        </div>
-          </template>
+       <v-spacer></v-spacer>
+         <v-text-field
+          v-model="search"
+          label="Search"
+          single-line
+          hide-details
+         
+        >
         </v-text-field>
+
       </v-toolbar>
     </template>
 
@@ -98,22 +97,45 @@
     </template>
 
 
-    <template v-slot:[`item.Action`]="{ item }">
-      <v-icon
-        small
-        class="mr-2"
-        @click="editItem(item)"
-        v-if="editBtn"
+    <template v-slot:[`item.Edit`]="{ item }">
+      <v-btn
+        icon
+          v-if="editBtn"
       >
+        <v-icon
+          small
+          class="mr-2"
+          @click="editItem(item)"
+          
+        >
         mdi-pencil
-      </v-icon>
-      <v-icon
+        </v-icon>
+      </v-btn>
+      <!-- <v-icon
         small
         @click="deleteItem(item)"
         v-if="deleteBtn"
       >
         mdi-delete
-      </v-icon>
+      </v-icon> -->
+    </template>
+
+     <template v-slot:[`item.Delete`]="{ item }">
+      <v-btn
+        icon
+        color="primary"
+          v-if="editBtn"
+      >
+       <v-icon
+        small
+        @click="deleteItem(item)"
+        v-if="deleteBtn"
+        color="pink"
+      >
+        mdi-delete
+      </v-icon> 
+      </v-btn>
+     
     </template>
   </v-data-table>
 </template>

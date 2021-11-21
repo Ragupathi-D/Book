@@ -1,0 +1,6 @@
+
+.theme--light.v-data-table > .v-data-table__wrapper > table > thead > tr > th {
+  color: teal !important ;
+  font-weight : 900;
+  font-size: 14px;
+}

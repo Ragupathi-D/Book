@@ -1,4 +1,5 @@
 import { bookModel, sampleData, sampleOrder } from '../../models/book'
+
 // import { uuid } from '../../helper/common'
 
 const list = [...sampleData]
@@ -13,9 +14,9 @@ export const book = {
     autoIncrement  : autoIncrement // reason for list set default 
   },
   mutations: {
-    setOrderBook : (state, payload) => state.orderBooks = [...payload],
+    setOrderBook : (state, payload) => state.orderBooks.push({...payload}),
     autoIncrement : state => state.autoIncrement += 1,
-    addBook: (state, payload) => state.bookList.push(payload),
+    addBook: (state, payload) => state.bookList.push({...payload}),
     deleteBook : (state, index) => {
       let book = state.bookList
       book[index].delete = true
@@ -25,10 +26,14 @@ export const book = {
       let book = [...state.bookList]
       book[payload.index] = Object.assign({...bookModel}, payload.item)
       state.bookList = [...book]
-    }
+    },
+    deleteOrderBook : (state, index) => state.orderBooks = state.orderBooks.filter((_, i) => i != index )
   },
   actions: {
-    setOrderBook : ({commit}, payload) => commit('setOrderBook', payload),
+    deleteOrderBook : ({commit}, payload) => commit('deleteOrderBook', payload),
+    setOrderBook : ({commit}, payload) => {
+      console.log(payload)
+      commit('setOrderBook', payload)},
     addBook: ({ commit, state }, payload) => {
       const item = payload.item
       if(!item.bookId) {

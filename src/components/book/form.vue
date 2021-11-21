@@ -1,134 +1,152 @@
 <template>
   <Fragment>
-    <crud-data-table
-      :headers="headers"
-      :defaultItem="defaultValue"
-      :value="getOrderBook"
-      :items="getBooks"
-      itemKey="bookId"
-      :setEditedItem.sync="setEditedItem"
-      @selectedValue="setOrderBook"
-      @AddItem="addItem"
-      @DeleteItem="deleteItem"
-      @UpdateItem="updateItem"
-    >
+      <!-- <v-toolbar
+      v-if="true === true"
+    dark
+    color="teal"
+  >
+    <v-toolbar-title>Select </v-toolbar-title>
 
-        <!-- @DeleteItem="fetchDropDown"
-      @EditItem="EditPPIInfo"
-          @AddItem="addItem"
-
-      @UpdateItem="EditPPIInfo" -->
-      <!-- <template v-slot:body >
-          {{ $slots }}
-
-      </template> -->
-    <template v-slot:forms="{ editedItem }" >
-      <v-row
-        class="justify-end"
+    <v-spacer></v-spacer>
+      <v-autocomplete
+      
+        v-model="selectedBooks"
+        :items="getUniqueBooks"
+        filled
         dense
+        color="blue-grey lighten-2"
+        label="Select"
+        item-text="title"
+        item-value="bookId"
+        solo-inverted
+        multiple
       >
-        <v-col>
-          <h2 class="font-weight-bold black--text" >Book</h2>
-        </v-col>
-        <v-col
-          cols="12"
-        >
-          <v-text-field
-            v-model="editedItem.title"
-            label="Book Name"
-            type="text"
+        <template v-slot:selection="data">
+          <v-chip
+            v-bind="data.attrs"
+            :input-value="data.selected"
+            close
+            @click="data.select"
+            @click:close="remove(data.item)"
           >
-          </v-text-field>
-        </v-col>
-        <v-col
-          cols="12"
-        >
-          <v-text-field
-            v-model="editedItem.authorName"
-            label="Author Name"
-            type="text"
-          >
-          </v-text-field>
-        </v-col>
-        <v-col
-          cols="12"
-        >
-          <v-text-field
-            v-model="editedItem.description"
-            label="book descrition"
-            type="text"
-          >
-          </v-text-field>
-        </v-col>
+            <v-avatar left>
+              <v-img src="@/assets/logo.png"></v-img>
+            </v-avatar>
+            {{ data.item.title }}
+          </v-chip>
+        </template>
 
-        <v-col cols="12" >
-          <h2 class="font-weight-bold pink--text" >Edition</h2>
-          <v-row v-for="(item, index) in editedItem.editions" :key="index" >
-            <v-col cols="12" class="pb-0" >
-              <v-divider class="mb-6 " v-if="index !== 0" ></v-divider>
-              <h4 class="black--text" >Edition : {{ index + 1 }}</h4>
-            </v-col>
-            <v-col cols="12" class="py-0">
-              <v-text-field
-                v-model="item.edition"
-                label="edition name"
-                type="text"
-              >
-              </v-text-field>
-            </v-col>
-            <v-col cols="12" class="py-0">
-              <v-text-field
-                v-model="item.description"
-                label="edition description"
-                type="text"
-              >
-              </v-text-field>
-            </v-col>
-            <v-col cols="6" class="py-0">
-              <v-text-field
-                v-model="item.price"
-                label="Price"
-                type="text"
-              >
-              </v-text-field>
-            </v-col>
-            <v-col cols="6" class="py-0">
-              <v-text-field
-                v-model="item.qty"
-                label="Qty"
-                type="text"
-              >
-              </v-text-field>
-            </v-col>
-            <v-col cols="12" class="text-right" >
-              <v-spacer></v-spacer>
-              <v-btn color="primary" @click="editedItem.editions.push({...bookEditionModel})" class="mr-2" >Add</v-btn>
-              <v-btn v-show="index !== 0" color="pink" >Delete</v-btn>
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
-    </template>
-    </crud-data-table>
-    <Buy
 
-    ></Buy>
+        <template v-slot:item="data">
+          <v-list-item-avatar>
+            <img src="@/assets/logo.png">
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title v-html="data.item.title"></v-list-item-title>
+            <v-list-item-subtitle v-html="data.item.authorName"></v-list-item-subtitle>
+          </v-list-item-content>
+        </template>
+      </v-autocomplete>
+      
+    </v-toolbar> -->
+    <v-card elevation="0" >
+      <crud-data-table
+        :headers="headers"
+        :defaultItem="defaultValue"
+        :value="getOrderBook"
+        :items="getSelectedBooks"
+        itemKey="bookId"
+        :setEditedItem.sync="setEditedItem"
+        @selectedValue="setOrderBook"
+        @AddItem="addItem"
+        @DeleteItem="deleteItem"
+        @UpdateItem="updateItem"
+      >
+
+          <!-- @DeleteItem="fetchDropDown"
+        @EditItem="EditPPIInfo"
+            @AddItem="addItem"
+
+        @UpdateItem="EditPPIInfo" -->
+        <!-- <template v-slot:body >
+            {{ $slots }}
+
+        </template> -->
+      <template v-slot:forms="{ editedItem }" >
+        <v-row
+          class="justify-end"
+          dense
+        >
+          <v-col
+            cols="12"
+          >
+            <v-text-field
+              v-model="editedItem.title"
+              label="Book Name"
+              type="text"
+            >
+            </v-text-field>
+          </v-col>
+          <v-col
+            cols="12"
+          >
+            <v-text-field
+              v-model="editedItem.authorName"
+              label="Author Name"
+              type="text"
+            >
+            </v-text-field>
+          </v-col>
+          <v-col cols="12">
+            <v-text-field
+              v-model="editedItem.edition"
+              label="Edition"
+              type="text"
+            >
+            </v-text-field>
+          </v-col>
+          <v-col cols="12">
+            <v-text-field
+              v-model="editedItem.description"
+              label="Description"
+              type="text"
+            >
+            </v-text-field>
+          </v-col>
+          <v-col cols="6">
+            <v-text-field
+              v-model="editedItem.price"
+              label="Price"
+              type="text"
+            >
+            </v-text-field>
+          </v-col>
+          <v-col cols="6">
+            <v-text-field
+              v-model="editedItem.stock"
+              label="Stock"
+              type="text"
+            >
+            </v-text-field>
+          </v-col>
+        </v-row>
+      </template>
+      </crud-data-table>
+    </v-card>
   </Fragment>
 </template>
 
 <script>
 import CrudDataTable from '../common/CrudDataTable.vue'
-import { bookModel, bookEditionModel } from '../../models/book.js'
+import { bookModel } from '../../models/book.js'
 import { mapActions, mapGetters } from 'vuex';
 
 import { Fragment } from 'vue-fragment'
-import Buy from './buy.vue';
 
 export default {
   components : {
     CrudDataTable,
     Fragment,
-    Buy
   }, // getBookByUser
   mounted () {
     console.log(this.$slots)
@@ -141,32 +159,60 @@ export default {
     ...mapGetters('USER', {
       getCurrentUser : 'getCurrentUser'
     }),
+    getUniqueBooks () {
+      let result = {};
+      let data = [];
+      this.getBooks.forEach(function(x){
+        if(result[x.bookId] === undefined) {
+          result[x.bookId] = {}
+        }
+        if(result[x.bookId][x.authorName] !== undefined) {
+          return
+        }        
+        result[x.bookId][x.authorName] = true;
+        data.push(x)
+      })
+      return data
+    },
+    getSelectedBooks () {
+      
+      if(this.selectedBooks.length === 0 ) {
+        return this.getBooks
+      }
+      return this.getBooks.filter((x) => {
+        console.log(this.selectedBooks, this.selectedBooks.includes( x.bookId ));
+        return this.selectedBooks.includes( x.bookId )})
+    }
   },
   methods: {
+
     ...mapActions('BOOK', {
       addItem : 'addBook',
       deleteItem : 'deleteBook',
       updateItem : 'updateBook',
       setOrderBook : 'setOrderBook',
     }),
-    async pushProcess(editedItem) {
-      const details = editedItem
-      await details.editions.push({...bookEditionModel})
-    }
+    remove (item) {
+      const index = this.selectedBooks.indexOf(item.bookId)
+      if (index >= 0) this.selectedBooks.splice(index, 1)
+    },
   },
   data: () => ({
     searchBookId : null,
     search : '',
-    defaultValue : Object.assign({...bookModel}, {editions : [{...bookEditionModel}]}),
-    bookEditionModel : {...bookEditionModel},
+    defaultValue : Object.assign({...bookModel}),
     setEditedItem : {},
+    selectedBooks : [],
     headers : [
       {text : 'Title', value : 'title'},
       {text : 'Edition', value : 'edition'},
       {text : 'Author Name', value : 'authorName'},
       {text : 'Price', value : 'price'},
       {text : 'Available', value : 'stock'},
-      {text : 'Action', value : 'Action'}
+      {text : 'Edit', 
+        
+      value : 'Edit'},
+      {text : 'Delete',  value : 'Delete'}
     ],
   }),
 }
