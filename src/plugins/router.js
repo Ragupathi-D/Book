@@ -11,17 +11,17 @@ const routes = [
   },
   {
     path: '/user',
-    meta: { requiresAuth: true, type : 'user' },
+    // meta: { requiresAuth: true, type : 'user' },
     component : () => import( '../views/user/Book.vue')
   },
   {
     path: '/book',
     name: 'Book',
-    meta: { requiresAuth: true, type : 'admin' },
+    // meta: { requiresAuth: true, type : 'admin' },
     component: () => import('../views/Book.vue'),
     children : [
       {
-        meta: { requiresAuth: true, type : 'admin' },
+        // meta: { requiresAuth: true, type : 'admin' },
         path : 'form',
         component: () => import('../components/book/form.vue'),
       },
@@ -38,26 +38,24 @@ const routes = [
   {
     path: '/order',
     name: 'Order',
-    meta: { requiresAuth: true },
+    // meta: { requiresAuth: true },
     component: () => import('../views/Order.vue'),
     children : [
       {
-        meta: { requiresAuth: true },
+        // meta: { requiresAuth: true },
         path : 'view',
         component: () => import('../components/order/view.vue'),
       },
       {
-        meta: { requiresAuth: true },
+        // meta: { requiresAuth: true },
         path : 'about',
         component : () => import('../views/About.vue'),
       },
       {
-        meta: { requiresAuth: true },
         path : '*',
         redirect : 'view'
       },
       {
-        meta: { requiresAuth: true },
         path : '',
         redirect : 'view'
       },
@@ -82,9 +80,6 @@ const router = new VueRouter({
 router.beforeEach((to, _, next) => {
   const currentUser = {...store.getters['USER/getCurrentUser']};
   const isAuthenticated = currentUser.userId
-  const meta = to.matched.some(record => record.meta)
-
-  console.log('m',meta, to.matched)
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (isAuthenticated) {
       return next();
@@ -94,11 +89,6 @@ router.beforeEach((to, _, next) => {
         query: { redirect: to.fullPath }
       });
     }
-    next({
-      path: '/login',
-      query: { redirect: to.fullPath }
-    });
-
   } else {
     next();
   }

@@ -23,7 +23,7 @@ npm run lint
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
-
+-- donot reload page
 
 --- Admin ---
 User Name : admin
@@ -33,3 +33,9 @@ Password : admin
 User Name : user
 Password : user
 
+dummy data add for
+
+/src/models/
+  /users.js
+  /book.js
+  /orders.js

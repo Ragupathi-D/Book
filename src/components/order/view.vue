@@ -1,6 +1,5 @@
 <template>
   <Fragment>
-
     <v-toolbar v-if="getCurrentUser.type == 'admin'" >
       <v-autocomplete
         v-model="selectedUser"
@@ -12,7 +11,6 @@
         item-value="userId"
         clearable
       >
-
       </v-autocomplete>
       <v-spacer></v-spacer>
       <v-spacer></v-spacer>

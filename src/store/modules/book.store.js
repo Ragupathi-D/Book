@@ -1,7 +1,5 @@
 import { bookModel, sampleData, sampleOrder } from '../../models/book'
 
-// import { uuid } from '../../helper/common'
-
 const list = [...sampleData]
 const autoIncrement = list ? list.length + 1 : 1;
 const sampleOrderList = [...sampleOrder]
@@ -27,7 +25,8 @@ export const book = {
       book[payload.index] = Object.assign({...bookModel}, payload.item)
       state.bookList = [...book]
     },
-    deleteOrderBook : (state, index) => state.orderBooks = state.orderBooks.filter((_, i) => i != index )
+    deleteOrderBook : (state, index) => state.orderBooks = state.orderBooks.filter((_, i) => i != index ),
+    reduceStock : (state, item) => state.bookList = [...item]
   },
   actions: {
     deleteOrderBook : ({commit}, payload) => commit('deleteOrderBook', payload),
@@ -42,9 +41,15 @@ export const book = {
     },
     deleteBook: ( {commit}, payload ) => commit('deleteBook', payload.index),
     updateBook: ({commit}, payload) => commit('updateBook', payload),
-    validationBuy : (item) => {
-      console.log(item)
-      return ''
+    reduceStock : async ({commit, state}, payload) => {
+      const items = [...state.bookList]
+      items.forEach((x, key) => {
+        if(payload[x.bookId] !== undefined) {
+          const stock = x.stock
+          items[key].stock = stock - payload[x.bookId]
+        }
+      });
+      await commit('reduceStock', items)
     }
   },
   getters: {

@@ -9,11 +9,12 @@
           md="4"
           lg="3"
         >
+        <!-- src="https://cdn.vuetifyjs.com/images/cards/docks.jpg" -->
           <v-card   @click="details(item)" >
             <v-img
-              class="white--text align-end ma-2"
+              class="white--text align-end"
               height="200px"
-              src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+              :src="item.image"
             >
             </v-img>
             <v-card-title >
@@ -54,85 +55,83 @@
       <v-card
         elevation="0"
       >
-        <div v-show="product" >
-        <v-img
-          class="white--text align-end"
-          height="200px"
-          src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-        >
-        </v-img>
-
-        <v-card-title class="pink--text pb-2" >
-          {{ needed.title }}
-        </v-card-title>
-        <v-card-subtitle class="pt-1 font-italic" >
-          {{ needed.authorName }}
-          ({{ needed.edition }})
-        </v-card-subtitle>
-        <v-card-text>
-          {{ needed.description }}
-
-        </v-card-text>
-        <v-card-actions>
-          <v-badge
-            bordered
-            color="green"
-            :content="needed.stock"
-            overlap
-            
+        <div v-show="needed.title" >
+          <v-img
+            class="white--text align-end"
+            height="200px"
+            :src="needed.image"
           >
+          </v-img>
 
-            <v-btn
-              color="primary"
-              small
+          <v-card-title class="pink--text pb-2" >
+            {{ needed.title }}
+          </v-card-title>
+          <v-card-subtitle class="pt-1 font-italic" >
+            {{ needed.authorName }}
+            ({{ needed.edition }})
+          </v-card-subtitle>
+          <v-card-text>
+            {{ needed.description }}
+
+          </v-card-text>
+          <v-card-actions>
+            <v-badge
+              bordered
+              color="green"
+              :content="needed.stock"
+              overlap 
             >
-            ${{needed.price}}
+              <v-btn
+                color="primary"
+                small
+              >
+              ${{needed.price}}
+                
+              </v-btn>
+            </v-badge>
+            <v-spacer></v-spacer> 
+            <v-btn-toggle>
+            <v-btn
+              x-small
+              color="pink"
+              text
+              elevation="0"
+              fab
+              :disabled="qty == 1"
+              @click="qty= qty - 1"
+            >
+            -
               
             </v-btn>
-          </v-badge>
-          <v-spacer></v-spacer> 
-          <v-btn-toggle>
-          <v-btn
-            x-small
-            color="pink"
-            text
-            elevation="0"
-            fab
-            :disabled="qty == 1"
-            @click="qty= qty - 1"
-          >
-          -
-            
-          </v-btn>
-          <v-btn
-            x-small
-            fab
-            text
-          >
-            {{qty}}
-          </v-btn>
-          <v-btn
-            color="success"
-            x-small
-            elevation="0"
-            fab
-            text
-            :disabled="qty >= needed.stock"
-            @click="qty= qty + 1"
-          >
-          +
-            
-          </v-btn>
-          </v-btn-toggle>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="blue darken-1"
-            class="white--text"
-            @click="addToCart(needed)"
-          >
-            Add to Cart
-          </v-btn>
-        </v-card-actions>
+            <v-btn
+              x-small
+              fab
+              text
+            >
+              {{qty}}
+            </v-btn>
+            <v-btn
+              color="success"
+              x-small
+              elevation="0"
+              fab
+              text
+              :disabled="qty >= needed.stock"
+              @click="qty= qty + 1"
+            >
+            +
+              
+            </v-btn>
+            </v-btn-toggle>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="blue darken-1"
+              class="white--text"
+              @click="addToCart(needed)"
+            >
+              Add to Cart
+            </v-btn>
+          </v-card-actions>
         </div>
         <v-divider></v-divider>
         <v-card-title class=" small font-weight-bold" >Order Details</v-card-title>
@@ -215,7 +214,14 @@
       fab
       @click="showCartDetails"
     >
-      <v-icon color="white" >mdi-cart</v-icon>
+    
+      <v-badge
+        color="blue"
+        :content="getOrderBook.length || '0'"
+      >
+
+        <v-icon color="white" >mdi-cart</v-icon>
+      </v-badge>
     </v-btn>
   </v-container>
 </template>
@@ -223,14 +229,13 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import { nowDate } from '../../helper/common'
+import { nowDate, getObjectData } from '../../helper/common'
 
   export default {
     data () {
       return {
         drawer : false,
         needed : {},
-        product : true,
         qty : 1
       }
     },
@@ -247,18 +252,23 @@ import { nowDate } from '../../helper/common'
       drawer  (value) {
         this.qty = 1
         if(value === false) {
-          this.product = true
+          this.needed = {}
         } 
       }
     },
     computed: {
       ...mapGetters('BOOK', {
         getBooks : 'getBooks',
-        getOrderBook : 'getOrderBook'
+        getAllOrderBook : 'getOrderBook',      
       }),
       ...mapGetters('USER', {
         getCurrentUser : 'getCurrentUser'
       }),
+      getOrderBook () {
+        const userId = this.getCurrentUser.userId
+        return [...this.getAllOrderBook.filter( x => x.userId === userId )]
+      },
+
       numberOfPages () {
         return Math.ceil(this.items.length / this.itemsPerPage)
       },
@@ -268,7 +278,8 @@ import { nowDate } from '../../helper/common'
     },
     methods: {
       ...mapActions('ORDER', {
-        addBook : 'addBook'
+        addBook : 'addBook',
+        reduceStock : 'reduceStock'
       }),
       ...mapActions('BOOK', {
         validationBuy : 'validationBuy'
@@ -280,19 +291,38 @@ import { nowDate } from '../../helper/common'
         const now = nowDate();
         const userId = this.getCurrentUser.userId
         await this.setOrderBook({...item, qty : this.qty, orderDate : now, userId : userId})
+        this.$alert("Add to Cart added successfully");
       },
       async buyAll() {
-        const error = await this.validationBuy( this.getOrderBook )
-        if(error != '') {
-          this.$alert("sorry ");
+        let error = {};
+        let bookIds = {}
+        let bookTotal = {}
+        this.getOrderBook.forEach(x => {
+          let bookId = x.bookId
+          if(bookTotal[bookId] === undefined) {
+            bookTotal[bookId] = 0;
+            const result = getObjectData( this.getBooks, bookId, 'bookId' )
+            bookIds[bookId] = result
+          }
+
+          bookTotal[bookId] += x.qty
+          if(bookTotal[bookId] > bookIds[bookId].stock) {
+            const result = bookIds[bookId]
+            error[bookId] = `<b>${result.title}</b> - ${result.authorName} (${ result.edition }) : ${result.stock} < ${bookTotal[bookId]}`;
+          }
+        });
+
+        if(Object.keys(error).length !== 0 ) {
+          let str =  Object.values(error).join("<br>");
+          this.$alert('', '', 'error', {html : str});
           return;
         }
 
         await this.addBook(this.getOrderBook)
+        await this.reduceStock(bookTotal)
         this.$router.push('/order/view');
       },
       showCartDetails () {
-        this.product = false
         this.drawer = true
       },
       totalAmount () {

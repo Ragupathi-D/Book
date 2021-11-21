@@ -16,8 +16,6 @@
       <v-toolbar
         flat
       >
-       
-
          <v-dialog
           v-model="dialog"
         >
@@ -44,7 +42,7 @@
             <v-card-text>
               <v-container>
                 <v-form ref="form" v-model="form" >
-                  <slot name="forms" :editedItem="editedItem" ></slot>
+                  <slot name="forms" :editedItem="editedItem" :rules="rules" ></slot>
                 </v-form>
               </v-container>
             </v-card-text>
@@ -119,7 +117,9 @@
         mdi-delete
       </v-icon> -->
     </template>
-
+    <template v-slot:[`item.image`]="{ item }">
+      <v-img height="40" width="140" :src="item.image" ></v-img>         
+    </template>
      <template v-slot:[`item.Delete`]="{ item }">
       <v-btn
         icon
@@ -207,6 +207,14 @@
       dialog: false,
       dialogDelete: false,
       editedIndex: -1,
+      rules: {
+        required: value => {
+          if(!value) {
+            return "Required."
+          }
+          return !!value.trim() || "Required."
+        },
+      }
     }),
     computed: {
       formTitle () {
@@ -227,8 +235,8 @@
       },
       dialog (val) {
         if(val) {
-         const form = this.$refs.form;
-         if(form)
+          const form = this.$refs.form;
+          if(form)
             form.resetValidation()
 
         } else {
@@ -285,6 +293,7 @@
       },
       async save () {
         const validate = await this.$refs.form.validate();
+        console.log(validate)
         if(!validate) {
           return false; 
         }

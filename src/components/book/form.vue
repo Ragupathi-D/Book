@@ -72,7 +72,7 @@
             {{ $slots }}
 
         </template> -->
-      <template v-slot:forms="{ editedItem }" >
+      <template v-slot:forms="{ editedItem, rules }" >
         <v-row
           class="justify-end"
           dense
@@ -84,6 +84,7 @@
               v-model="editedItem.title"
               label="Book Name"
               type="text"
+              :rules="[rules.required]"
             >
             </v-text-field>
           </v-col>
@@ -94,6 +95,7 @@
               v-model="editedItem.authorName"
               label="Author Name"
               type="text"
+              :rules="[rules.required]"
             >
             </v-text-field>
           </v-col>
@@ -109,6 +111,7 @@
             <v-text-field
               v-model="editedItem.description"
               label="Description"
+              :rules="[rules.required]"
               type="text"
             >
             </v-text-field>
@@ -118,6 +121,7 @@
               v-model="editedItem.price"
               label="Price"
               type="text"
+              :rules="[rules.required]"
             >
             </v-text-field>
           </v-col>
@@ -126,8 +130,20 @@
               v-model="editedItem.stock"
               label="Stock"
               type="text"
+              :rules="[rules.required]"
             >
             </v-text-field>
+          </v-col>
+          <v-col cols="12"               
+            v-if="!editedItem.userId"
+          >
+            <v-file-input
+              v-model="editedItem.files"
+              accept="image/*"
+              show-size
+               label="Image"
+              @change="fileUpload"
+            ></v-file-input>
           </v-col>
         </v-row>
       </template>
@@ -181,7 +197,6 @@ export default {
       return data
     },
     getSelectedBooks () {
-      
       if(this.selectedBooks.length === 0 ) {
         return this.getBooks
       }
@@ -189,7 +204,9 @@ export default {
     }
   },
   methods: {
-
+    fileUpload(image) {
+      this.setEditedItem.image = URL.createObjectURL(image)
+    },
     ...mapActions('BOOK', {
       addItem : 'addBook',
       deleteItem : 'deleteBook',
@@ -205,12 +222,14 @@ export default {
     },
   },
   data: () => ({
+    getImage : '',
     searchBookId : null,
     search : '',
     defaultValue : Object.assign({...bookModel}),
     setEditedItem : {},
     selectedBooks : [],
     headers : [
+      {text : 'Image', value : 'image'},
       {text : 'Title', value : 'title'},
       {text : 'Edition', value : 'edition'},
       {text : 'Author Name', value : 'authorName'},
