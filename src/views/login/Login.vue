@@ -146,7 +146,7 @@
           }
           return !!value.trim() || "Required."
         },
-        min: v => (v && v.length >= 4) || "Min 8 characters"
+        min: v => (v && v.length >= 4) || "Min 4 characters"
       }
     })
   }
