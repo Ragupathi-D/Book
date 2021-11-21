@@ -10,6 +10,7 @@
         item-text="userName"
         item-value="userId"
         clearable
+        multiple
       >
       </v-autocomplete>
       <v-spacer></v-spacer>

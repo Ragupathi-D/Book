@@ -1,8 +1,25 @@
 <template>
   <v-container fluid>
+    <v-toolbar >
+      <v-autocomplete
+        v-model="selectedBooks"
+        class="mt-2"
+        dense
+        label="Book Name"
+        :items="getBooks"
+        multiple
+        item-text="title"
+        item-value="title"
+        clearable
+      >
+      </v-autocomplete>
+      <v-spacer></v-spacer>
+      <v-spacer></v-spacer>
+    </v-toolbar>
+
       <v-row>
         <v-col
-          v-for="item in getBooks"
+          v-for="item in filterBooks"
           :key="item.bookId"
           cols="12"
           sm="6"
@@ -219,7 +236,6 @@
         color="blue"
         :content="getOrderBook.length || '0'"
       >
-
         <v-icon color="white" >mdi-cart</v-icon>
       </v-badge>
     </v-btn>
@@ -236,7 +252,8 @@ import { nowDate, getObjectData } from '../../helper/common'
       return {
         drawer : false,
         needed : {},
-        qty : 1
+        qty : 1,
+        selectedBooks : []
       }
     },
     async created() {
@@ -268,7 +285,13 @@ import { nowDate, getObjectData } from '../../helper/common'
         const userId = this.getCurrentUser.userId
         return [...this.getAllOrderBook.filter( x => x.userId === userId )]
       },
+      filterBooks () {
+        if(this.selectedBooks.length === 0 ) {
+          return this.getBooks
+        }
+        return this.getBooks.filter((x) => { return this.selectedBooks.includes( x.title )})
 
+      },
       numberOfPages () {
         return Math.ceil(this.items.length / this.itemsPerPage)
       },
