@@ -10,11 +10,8 @@
     :item-key="itemKey"
     return-object
   >
-    <template v-slot:body="hello" v-if="hasFooterSlot()" >
-      <slot name="body" v-bind="hello" >
-
-      </slot>
-
+    <template v-for="(_,slot) in $scopedSlots"  v-slot:[slot]="props" >
+      <slot :name="slot" v-bind="props"   ></slot>
     </template>
 
     <template v-slot:top>
@@ -110,6 +107,12 @@
 <script>
   export default {
     props:{
+      setEditedItem : {
+        type: Object,
+        default: function(){
+          return {}
+        }
+      },
       headers: {
         type: Array,
         default: function(){
@@ -167,17 +170,20 @@
       dialog: false,
       dialogDelete: false,
       editedIndex: -1,
-      editedItem: {},
     }),
-
     computed: {
       formTitle () {
         return this.editedIndex === -1 ? 'New' : 'Edit'
       },
+      editedItem : {
+        get() {
+          return this.setEditedItem
+        },
+        set( val ) {
+          this.$emit('update:setEditedItem', val)
+        }, 
+      }
     },
- mounted () {
-    console.log(this.$slots)
-  },
     watch: {
       data(value){
         this.$emit('selectedValue', value)
@@ -196,13 +202,12 @@
         val || this.closeDelete()
       },
     },
-
     created () {
       this.initialize()
     },
     methods: {
       initialize () {
-        this.editedItem = Object.assign(this.editedItem, this.defaultItem)
+        this.editedItem = Object.assign({},this.editedItem, this.defaultItem)
       },
 
       async editItem (item) {
@@ -242,6 +247,7 @@
         })
       },
       hasFooterSlot() {
+        console.log( this );
         return !!this.$slots.body
       },
       async save () {

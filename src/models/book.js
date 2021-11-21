@@ -3,9 +3,16 @@ export const bookModel =  {
   title : '',
   description : '',
   authorName : '',
-  price : '',
-  stock : '',
   bookId : null,
+  delete : false,
+  editions : []
+}
+
+export const bookEditionModel = {
+  edition : '',
+  price : '',
+  description : '',
+  stock : '',
   delete : false
 }
 

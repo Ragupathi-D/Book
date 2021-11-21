@@ -7,6 +7,7 @@
       :items="getBooks"
       :showSelect="true"
       itemKey="bookId"
+      :setEditedItem.sync="setEditedItem"
       @selectedValue="setOrderBook"
       @AddItem="addItem"
       @DeleteItem="deleteItem"
@@ -26,35 +27,15 @@
         class="justify-end"
         dense
       >
-        <!-- <v-col
-          cols="6"
-          md="3"
-        >
-          <v-autocomplete
-            v-model="editedItem.BuyOutFARID"
-            :items="FARInfo"
-            item-text="iboss_preferred_name"
-            item-value="iboss_personal_info_id"
-            label="BuyOut FARName"
-          >
-          </v-autocomplete>
-        </v-col> -->
-        <v-col
-          cols="12"
-        >
-          <v-text-field
-            v-model="editedItem.title"
-            label="Title"
-            type="text"
-          >
-          </v-text-field>
+        <v-col>
+          <h2 class="font-weight-bold black--text" >Book</h2>
         </v-col>
         <v-col
           cols="12"
         >
           <v-text-field
-            v-model="editedItem.description"
-            label="Description"
+            v-model="editedItem.title"
+            label="Book Name"
             type="text"
           >
           </v-text-field>
@@ -73,23 +54,59 @@
           cols="12"
         >
           <v-text-field
-            v-model="editedItem.stock"
-            label="Stock"
-            type="number"
-          >
-          </v-text-field>
-        </v-col>
-        <v-col
-          cols="12"
-        >
-          <v-text-field
-            v-model="editedItem.price"
-            label="Price"
-            type="number"
+            v-model="editedItem.description"
+            label="book descrition"
+            type="text"
           >
           </v-text-field>
         </v-col>
 
+        <v-col cols="12" >
+          <h2 class="font-weight-bold pink--text" >Edition</h2>
+          <v-row v-for="(item, index) in editedItem.editions" :key="index" >
+            <v-col cols="12" class="pb-0" >
+              <v-divider class="mb-6 " v-if="index !== 0" ></v-divider>
+              <h4 class="black--text" >Edition : {{ index + 1 }}</h4>
+            </v-col>
+            <v-col cols="12" class="py-0">
+              <v-text-field
+                v-model="item.edition"
+                label="edition name"
+                type="text"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="12" class="py-0">
+              <v-text-field
+                v-model="item.description"
+                label="edition description"
+                type="text"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="6" class="py-0">
+              <v-text-field
+                v-model="item.price"
+                label="Price"
+                type="text"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="6" class="py-0">
+              <v-text-field
+                v-model="item.qty"
+                label="Qty"
+                type="text"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="12" class="text-right" >
+              <v-spacer></v-spacer>
+              <v-btn color="primary" @click="editedItem.editions.push({...bookEditionModel})" class="mr-2" >Add</v-btn>
+              <v-btn v-show="index !== 0" color="pink" >Delete</v-btn>
+            </v-col>
+          </v-row>
+        </v-col>
       </v-row>
     </template>
     </crud-data-table>
@@ -101,7 +118,7 @@
 
 <script>
 import CrudDataTable from '../common/CrudDataTable.vue'
-import { bookModel } from '../../models/book.js'
+import { bookModel, bookEditionModel } from '../../models/book.js'
 import { mapActions, mapGetters } from 'vuex';
 
 import { Fragment } from 'vue-fragment'
@@ -130,11 +147,17 @@ export default {
       addItem : 'addBook',
       deleteItem : 'deleteBook',
       updateItem : 'updateBook',
-      setOrderBook : 'setOrderBook'
+      setOrderBook : 'setOrderBook',
     }),
+    async pushProcess(editedItem) {
+      const details = editedItem
+      await details.editions.push({...bookEditionModel})
+    }
   },
   data: () => ({
-    defaultValue : Object.assign({...bookModel}),
+    defaultValue : Object.assign({...bookModel}, {editions : [{...bookEditionModel}]}),
+    bookEditionModel : {...bookEditionModel},
+    setEditedItem : {},
     headers : [
       {text : 'Title', value : 'title'},
       {text : 'Description', value : 'description'},
