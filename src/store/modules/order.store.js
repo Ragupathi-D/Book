@@ -57,14 +57,14 @@ export const order = {
         if(!tempUser[element.userId]){
           tempUser[element.userId] = getObjectData( user, element.userId, 'userId' );
         }
-        console.log('data', element)
         const bookDetails = tempBook[element.bookId]
         const userDetails = tempUser[element.userId]
         result.push( Object.assign({}, element, 
           {
-            userName : userDetails.name,
+            userName : userDetails.userName,
             email : userDetails.email,
-            bookName : bookDetails.title
+            bookName : bookDetails.title,
+            authorName : `${bookDetails.authorName} (${bookDetails.edition})`,
           } 
         ));
       });

@@ -148,8 +148,14 @@ export default {
     CrudDataTable,
     Fragment,
   }, // getBookByUser
-  mounted () {
-    console.log(this.$slots)
+  async created() {
+    let meta = this.$route.meta;
+    if(meta.type) {
+      if(meta.type != this.getCurrentUser.type) {
+        await this.logoutProcess()
+        this.$router.push('/login')
+      }
+    } 
   },
   computed:{
     ...mapGetters('BOOK', {
@@ -179,9 +185,7 @@ export default {
       if(this.selectedBooks.length === 0 ) {
         return this.getBooks
       }
-      return this.getBooks.filter((x) => {
-        console.log(this.selectedBooks, this.selectedBooks.includes( x.bookId ));
-        return this.selectedBooks.includes( x.bookId )})
+      return this.getBooks.filter((x) => { return this.selectedBooks.includes( x.bookId )})
     }
   },
   methods: {
@@ -191,6 +195,9 @@ export default {
       deleteItem : 'deleteBook',
       updateItem : 'updateBook',
       setOrderBook : 'setOrderBook',
+    }),
+    ...mapActions('USER',{
+      'logoutProcess' : 'logout' 
     }),
     remove (item) {
       const index = this.selectedBooks.indexOf(item.bookId)
@@ -209,9 +216,7 @@ export default {
       {text : 'Author Name', value : 'authorName'},
       {text : 'Price', value : 'price'},
       {text : 'Available', value : 'stock'},
-      {text : 'Edit', 
-        
-      value : 'Edit'},
+      {text : 'Edit', value : 'Edit'},
       {text : 'Delete',  value : 'Delete'}
     ],
   }),

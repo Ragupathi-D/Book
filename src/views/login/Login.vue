@@ -13,10 +13,10 @@
                                 <v-form ref="loginForm" v-model="valid" lazy-validation>
                                     <v-row>
                                         <v-col cols="12">
-                                            <v-text-field v-model.trim="loginUser" label="UserName" required></v-text-field>
+                                            <v-text-field v-model.trim="loginUser" label="User Name" required></v-text-field>
                                         </v-col>
                                         <v-col cols="12">
-                                            <v-text-field v-model.trim="loginPassword" :append-icon="show1?'eye':'eye-off'" :rules="[rules.required, rules.min]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Password" hint="At least 8 characters" counter @click:append="show1 = !show1"></v-text-field>
+                                            <v-text-field v-model.trim="loginPassword" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Password" hint="At least 4 characters" counter @click:append="show1 = !show1"></v-text-field>
                                         </v-col>
                                         <v-col class="d-flex" cols="12" sm="6" xsm="12">
                                         </v-col>
@@ -50,7 +50,7 @@
                                             <v-text-field dense v-model.trim="register.userName" :rules="[rules.required, checkUserName]" label="User Name" required></v-text-field>
                                         </v-col>
                                         <v-col cols="12">
-                                            <v-text-field dense v-model.trim="register.pass" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Password" hint="At least 8 characters" counter @click:append="show1 = !show1"></v-text-field>
+                                            <v-text-field dense v-model.trim="register.pass" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Password" hint="At least 4 characters" counter @click:append="show1 = !show1"></v-text-field>
                                         </v-col>
                                         <v-col cols="12">
                                             <v-text-field dense block v-model.trim="pass2" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, passwordMatch]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Confirm Password" counter @click:append="show1 = !show1"></v-text-field>
@@ -95,12 +95,12 @@
         if (this.tab == 0 && this.$refs.loginForm.validate()) {
           const result = await this.verifyLogin({ userName : this.loginUser, pass : this.loginPassword });
           if(result === undefined) {
-            console.log('username or passwork invalid');
+            this.$alert('username or password incorrect')
             return;
           }
           const router = this.$router
           if(result.type == 'admin')
-            router.push('/book')
+            router.push('/book/form')
           if(result.type == 'user')
             router.push('/user')
           return  
@@ -110,6 +110,7 @@
           await this.addUser( this.register );
           this.register = Object.assign({...userModel})
           this.$refs.registerForm.reset();
+          this.tab = 0
         }
         // if (this.$refs.loginForm.validate()) {
         //   this.addUser(this.register);

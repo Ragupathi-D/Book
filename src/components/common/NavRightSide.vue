@@ -104,7 +104,6 @@ export default {
       this.$emit('confirm')
     },
     getImgUrl(q) {
-      console.log(q)
       const images = require.context('@/assets/', false, /\.png$/)
       return images( 'logo.png' )
     }

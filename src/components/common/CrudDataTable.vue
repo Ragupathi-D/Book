@@ -283,10 +283,6 @@
           this.editedIndex = -1
         })
       },
-      hasFooterSlot() {
-        console.log( this );
-        return !!this.$slots.body
-      },
       async save () {
         const validate = await this.$refs.form.validate();
         if(!validate) {

@@ -31,9 +31,7 @@ export const book = {
   },
   actions: {
     deleteOrderBook : ({commit}, payload) => commit('deleteOrderBook', payload),
-    setOrderBook : ({commit}, payload) => {
-      console.log(payload)
-      commit('setOrderBook', payload)},
+    setOrderBook : ({commit}, payload) => commit('setOrderBook', payload),
     addBook: ({ commit, state }, payload) => {
       const item = payload.item
       if(!item.bookId) {
@@ -43,7 +41,11 @@ export const book = {
       commit('addBook', item)
     },
     deleteBook: ( {commit}, payload ) => commit('deleteBook', payload.index),
-    updateBook: ({commit}, payload) => commit('updateBook', payload) 
+    updateBook: ({commit}, payload) => commit('updateBook', payload),
+    validationBuy : (item) => {
+      console.log(item)
+      return ''
+    }
   },
   getters: {
     getBooks: state => {

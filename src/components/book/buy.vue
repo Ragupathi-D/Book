@@ -108,11 +108,7 @@ import { nowDate } from "../../helper/common"
 
 export default {
   components : {
-    // NavRightSide,
     Fragment
-  }, // getBookByUser
-  mounted () {
-    // console.log('display order',[...this.displayOrders])
   },
   computed:{
     ...mapGetters('BOOK', {

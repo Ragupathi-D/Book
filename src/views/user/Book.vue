@@ -1,6 +1,5 @@
 <template>
   <v-container fluid>
-
       <v-row>
         <v-col
           v-for="item in getBooks"
@@ -235,6 +234,15 @@ import { nowDate } from '../../helper/common'
         qty : 1
       }
     },
+    async created() {
+      let meta = this.$route.meta;
+      if(meta.type) {
+        if(meta.type != this.getCurrentUser.type) {
+          await this.logoutProcess()
+          this.$router.push('/login')
+        }
+      } 
+    },
     watch : {
       drawer  (value) {
         this.qty = 1
@@ -257,11 +265,16 @@ import { nowDate } from '../../helper/common'
       filteredKeys () {
         return this.keys.filter(key => key !== 'Name')
       },
-
     },
     methods: {
       ...mapActions('ORDER', {
         addBook : 'addBook'
+      }),
+      ...mapActions('BOOK', {
+        validationBuy : 'validationBuy'
+      }),
+      ...mapActions('USER',{
+        'logoutProcess' : 'logout' 
       }),
       async addToCart(item) {
         const now = nowDate();
@@ -269,7 +282,14 @@ import { nowDate } from '../../helper/common'
         await this.setOrderBook({...item, qty : this.qty, orderDate : now, userId : userId})
       },
       async buyAll() {
+        const error = await this.validationBuy( this.getOrderBook )
+        if(error != '') {
+          this.$alert("sorry ");
+          return;
+        }
+
         await this.addBook(this.getOrderBook)
+        this.$router.push('/order/view');
       },
       showCartDetails () {
         this.product = false
