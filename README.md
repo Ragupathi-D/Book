@@ -20,7 +20,6 @@ npm run build
 npm run lint
 ```
 
-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
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
